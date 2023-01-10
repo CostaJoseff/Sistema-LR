@@ -1,5 +1,6 @@
 package Login;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,55 +63,9 @@ public class RepositoryContas {
 		this.administradores.get(ID).setSenha(montar(novaSenha));
 	}
     
-    private String montar(String criptografia) {
-    	String[] grupoSoma7  = {"q", "e", "t", "u", "o", "l"};
-    	String[] grupoSoma12 = {"w", "r", "y", "i", "p", "k"};
-    	String[] grupoSoma20 = {"j", "g", "d", "a", "x", "v", "n"};
-    	String[] grupoSoma9  = {"h", "f", "s", "z", "c", "b", "m"};
-    	HashSet<String> setSoma7 = new HashSet<>();
-    	HashSet<String> setSoma12 = new HashSet<>();
-    	HashSet<String> setSoma20 = new HashSet<>();
-    	HashSet<String> setSoma9 = new HashSet<>();
-    	
-    	for (String letra : grupoSoma7) {
-			setSoma7.add(letra);
-		}
-		for (String letra : grupoSoma12) {
-			setSoma12.add(letra);
-		}
-		for (String letra : grupoSoma20) {
-			setSoma20.add(letra);
-		}
-		for (String letra : grupoSoma9) {
-			setSoma9.add(letra);
-		}
-    	
-    	String retorno = "";
-		String criptoInvertida = "";
-		int soma = 0;
-		
-		for (int i = 0; i < criptografia.length(); i += 3) {
-			String hexadecimal = "" + criptografia.charAt(i) + criptografia.charAt(i + 1);
-			String chave = "" + criptografia.charAt(i + 2);
-			
-			if (setSoma12.contains(chave)) {
-				soma = 12;
-			} else if (setSoma20.contains(chave) ) {
-				soma = 20;
-			} else if (setSoma7.contains(chave)) {
-				soma = 7;
-			} else if (setSoma9.contains(chave)) {
-				soma = 9;
-			}
-			
-			int decimal = Integer.parseInt(hexadecimal, 16) - soma;
-			retorno += (char) decimal;
-		}
-		
-		for (int i = retorno.length() - 1; i > -1; i--) {
-			criptoInvertida += "" + retorno.charAt(i);
-		}
-		
-		return criptoInvertida;
+    private String montar(String textoQuebrado) {
+    	BigInteger d = new BigInteger("10800334039651574463254576618197122983390635841698433474900758978970544732316357580072484160820148863973097601402476620174039585617819420916769787937910711");
+    	BigInteger n = new BigInteger("125538307429523777402676048037744338792992662167799127768228678790350902176133709612762050147990404185582222244446954062989274309523715895280982268207411192832732866364551997975600990897540455695751718217656678343456984422855629847284030859458823063246234088264116492127298949204666274427547116571344016496151");
+    	return new String(new BigInteger(textoQuebrado).modPow(d, n).toByteArray());
     }
 }

@@ -1,7 +1,6 @@
 package Login;
 
-import java.util.HashSet;
-import java.util.Random;
+import java.math.BigInteger;
 import java.util.Set;
 
 public class ServiceLogin {
@@ -52,55 +51,10 @@ public class ServiceLogin {
 		this.repositoryContas.alteraSenhaAdminsitrador(ID, quebrar(novaSenha));
 	}
 
-	private String quebrar(String senha) {
-		String[] grupoSoma7  = {"q", "e", "t", "u", "o", "l"};
-		String[] grupoSoma12 = {"w", "r", "y", "i", "p", "k"};
-		String[] grupoSoma20 = {"j", "g", "d", "a", "x", "v", "n"};
-		String[] grupoSoma9  = {"h", "f", "s", "z", "c", "b", "m"};
-		String[] alfabeto = {"w", "r", "y", "i", "p", "k", "h", "f", "s", "z", "c", "b", "m", "q", "e", "t", "u", "o", "l", "j", "g", "d", "a", "x", "v", "n"};
-		HashSet<String> setSoma7 = new HashSet<>();
-		HashSet<String> setSoma12 = new HashSet<>();
-		HashSet<String> setSoma20 = new HashSet<>();
-		HashSet<String> setSoma9 = new HashSet<>();
-		Random gerador = new Random();
-		
-		for (String letra : grupoSoma7) {
-			setSoma7.add(letra);
-		}
-		for (String letra : grupoSoma12) {
-			setSoma12.add(letra);
-		}
-		for (String letra : grupoSoma20) {
-			setSoma20.add(letra);
-		}
-		for (String letra : grupoSoma9) {
-			setSoma9.add(letra);
-		}
-		
-		String senhaInvertida = "";
-		String retorno = "";
-		int soma;
-		char[] letras = senha.toCharArray();
-		for (int i = letras.length - 1; i > -1 ; i--) {
-			senhaInvertida += letras[i];
-		}
-
-		for (char letra : senhaInvertida.toCharArray()) {
-			String letraAleatoria = alfabeto[gerador.nextInt(26)];
-			if (setSoma7.contains(letraAleatoria)) { 
-				soma = 7;
-			} else if (setSoma12.contains(letraAleatoria)) {
-				soma = 12;
-			} else if (setSoma20.contains(letraAleatoria)) {
-				soma = 20;
-			} else {
-				soma = 9;
-			}
-
-			String hexadecimal = String.format("%x", ((int) letra + soma));
-			retorno += hexadecimal + letraAleatoria;
-		}
-		return retorno;
+	public String quebrar(String texto) {
+		BigInteger e = new BigInteger("60958009123833438732118812480122111623580621121904976293863275380408318406251754794498645471703258543751852892572806500665514242002303390991578479237267974594701629328678128034037744949480762453612955352408072168148191290186873981454155705260958265382059539048443903758662975417512486115776458490824189982591");
+		BigInteger n = new BigInteger("125538307429523777402676048037744338792992662167799127768228678790350902176133709612762050147990404185582222244446954062989274309523715895280982268207411192832732866364551997975600990897540455695751718217656678343456984422855629847284030859458823063246234088264116492127298949204666274427547116571344016496151");
+		return new BigInteger(texto.getBytes()).modPow(e, n).toString();
 	}
 	
 }
